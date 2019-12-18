@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{90FB6DE6-74C6-4268-A7AD-3AEE03FD9A64}</ProjectGuid>
+    <RootNamespace>Brick Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Brick Engine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)LevelEditor\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>C:\Dev\Libraries\c++\LTBL2-master\include;C:\Dev\Libraries\c++\imgui-sfml-master\include;C:\Dev\Libraries\c++\imgui-master\include;C:\Dev\Libraries\c++\Box2D-master\include;C:\Dev\Libraries\c++\SFML-2.5.1 VS\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Dev\Libraries\c++\LTBL2-master\lib;C:\Dev\Libraries\c++\Box2D-master\lib;C:\Dev\Libraries\c++\SFML-2.5.1 VS\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)LevelEditor\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>C:\Dev\Libraries\c++\LTBL2-master\include;C:\Dev\Libraries\c++\LTBL2-master\include;C:\Dev\Libraries\c++\imgui-sfml-master\include;C:\Dev\Libraries\c++\imgui-master\include;C:\Dev\Libraries\c++\Box2D-master\include;C:\Dev\Libraries\c++\SFML-2.5.1 VS\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Dev\Libraries\c++\LTBL2-master\lib;C:\Dev\Libraries\c++\Box2D-master\lib;C:\Dev\Libraries\c++\SFML-2.5.1 VS\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>SFML_STATIC;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>sfml-main-d.lib;sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;opengl32.lib;freetype.lib;winmm.lib;%(AdditionalDependencies);Box2D.lib;LTBL2-d.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>SFML_STATIC;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>sfml-main.lib;sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;opengl32.lib;freetype.lib;winmm.lib;%(AdditionalDependencies);Box2D.lib;LTBL2.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Libraries\c++\imgui-master\include\imgui.cpp" />
+    <ClCompile Include="..\..\..\Libraries\c++\imgui-master\include\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\Libraries\c++\imgui-master\include\imgui_widgets.cpp" />
+    <ClCompile Include="..\..\..\Libraries\c++\imgui-sfml-master\imgui-SFML.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Graphics\Group.cpp" />
+    <ClCompile Include="GUI\Button.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ResourceHolder.cpp" />
+    <ClCompile Include="States\EditorState.cpp" />
+    <ClCompile Include="GUI\Widget.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Entities\Cell.hpp" />
+    <ClInclude Include="Entities\Player.hpp" />
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="Graphics\Group.hpp" />
+    <ClInclude Include="GUI\Button.hpp" />
+    <ClInclude Include="GUI\Widget.hpp" />
+    <ClInclude Include="ResourceHolder.hpp" />
+    <ClInclude Include="ResourceManager.hpp" />
+    <ClInclude Include="State.hpp" />
+    <ClInclude Include="States\EditorState.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Libraries\c++\LTBL2-master\LTBL2\resources\lightOverShapeShader.frag" />
+    <None Include="..\..\..\Libraries\c++\LTBL2-master\LTBL2\resources\lightOverShapeShader.vert" />
+    <None Include="..\..\..\Libraries\c++\LTBL2-master\LTBL2\resources\unshadowShader.frag" />
+    <None Include="..\..\..\Libraries\c++\LTBL2-master\LTBL2\resources\unshadowShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\Libraries\c++\LTBL2-master\LTBL2\resources\directionLightTexture.png" />
+    <Image Include="..\..\..\Libraries\c++\LTBL2-master\LTBL2\resources\penumbraTexture.png" />
+    <Image Include="..\..\..\Libraries\c++\LTBL2-master\LTBL2\resources\pointLightTexture.png" />
+    <Image Include="..\..\..\Libraries\c++\LTBL2-master\LTBL2\resources\spookyLightTexture.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
