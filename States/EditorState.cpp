@@ -146,6 +146,7 @@ void EditorState::handleEvent(sf::Event e) {
 				currentState = "COLLISION MODE";
 			else
 				currentState = "EDIT MODE";*/
+			break;
 		}
 		case sf::Keyboard::H:
 			displayHelp = !displayHelp;
