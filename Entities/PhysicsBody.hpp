@@ -14,6 +14,8 @@ public:
 	PhysicsBody() = default;
 	PhysicsBody(const char* textureName, sf::Vector2f position = {0.0f, 0.0f}, Type bodyType = Type::DYNAMIC);
 	void render(sf::RenderTarget & renderer);
+	void move(sf::Vector2f movement);
+	void setPosition(sf::Vector2f position);
 private:
 	sf::Sprite graphicsBody;
 	b2BodyDef bodyDef;

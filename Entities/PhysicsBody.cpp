@@ -50,3 +50,11 @@ void PhysicsBody::render(sf::RenderTarget & renderer) {
 
 	renderer.draw(graphicsBody);
 }
+
+void PhysicsBody::move(sf::Vector2f movement) {
+	body->SetLinearVelocity({ static_cast<float>(movement.x / PhysicsManager::SCALE),static_cast<float>( movement.y / PhysicsManager::SCALE )});
+}
+
+void PhysicsBody::setPosition(sf::Vector2f position) {
+	body->SetTransform(b2Vec2(static_cast<float>(position.x / PhysicsManager::SCALE), static_cast<float>(position.y / PhysicsManager::SCALE)), body->GetAngle());
+}
