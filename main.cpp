@@ -6,6 +6,7 @@
 
 #include "Game.hpp"
 #include "States/EditorState.hpp"
+#include "States/TestState.hpp"
 
 //int main() {
 //	int gridSize = 50;
@@ -457,6 +458,7 @@
 
 int main() {
 	Game game;
-	game.pushState<EditorState>(game, "Brick Engine - Level editor");
+	//game.pushState<EditorState>(game, "Brick Engine - Level editor");
+	game.pushState<TestState>(game, "Brick Engine - Test scene (Physics)");
 	game.run();
 }
