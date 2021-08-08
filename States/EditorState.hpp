@@ -4,9 +4,8 @@
 #include "../Entities/Player.hpp"
 #include "../GUI/Button.hpp"
 #include <memory>
-#include <imgui-SFML.h>
-#include <ltbl/lighting/LightSystem.h>
 #include <imgui.h>
+#include <imgui-SFML.h>
 
 class EditorState : public State {
 public:

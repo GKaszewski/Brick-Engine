@@ -1,7 +1,7 @@
 #include "Game.hpp"
 #include "Managers/PhysicsManager.hpp"
 
-Game::Game() : window({1280, 720}, "Brick Engine"){   
+Game::Game() : window({1280, 704}, "Brick Engine"){   
     window.setPosition({window.getPosition().x, 0});
     window.setFramerateLimit(60);
 
@@ -39,10 +39,9 @@ void Game::run(){
         auto elapsed = time - lastTime;
         lastTime = time;
         lag += elapsed;
-        
-        PhysicsManager::getInstance()->world->Step(1 / 60.0f, 8, 3);
 
         state.handleInput();
+        PhysicsManager::getInstance()->world->Step(1 / 60.0f, 15, 15);
         state.update(elapsed);
 
         while (lag >= timePerUpdate){
