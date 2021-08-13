@@ -7,6 +7,7 @@ public:
 	sf::Vector2u& CellSize() { return cellSize; }
 	sf::Vector2u& GridSize() { return gridSize; }
 	sf::Color& Color() { return color; }
+	sf::FloatRect getBounds() { return verticies.getBounds(); }
 
 private:
 	sf::VertexArray verticies;

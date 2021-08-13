@@ -20,8 +20,6 @@ bool TileMap::load(const sf::Texture* tilesetTexture, sf::Vector2u textureTileSi
                 tu = tileNumber % (tileset->getSize().x / textureTileSize.x);
                 tv = tileNumber / (tileset->getSize().x / textureTileSize.x);
             }
-            /*int tu = tileNumber % (tileset->getSize().x / textureTileSize.x);
-            int tv = tileNumber / (tileset->getSize().x / textureTileSize.x);*/
 
             sf::Vertex* quad = &verticies[(i + j * width) * 4];
             quad[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y);
@@ -37,18 +35,6 @@ bool TileMap::load(const sf::Texture* tilesetTexture, sf::Vector2u textureTileSi
     }
 
     return true;
-}
-
-void TileMap::setPosition(sf::Vector2f position) {
-    for (unsigned int i = 0; i < width; ++i) {
-        for (unsigned int j = 0; j < height; ++j) {
-            sf::Vertex* quad = &verticies[(i + j * width) * 4];
-            quad[0].position = sf::Vector2f(i * tileSize.x + position.x, j * tileSize.y + position.y);
-            quad[1].position = sf::Vector2f((i + 1) * tileSize.x + position.x, j * tileSize.y + position.y);
-            quad[2].position = sf::Vector2f((i + 1) * tileSize.x + position.x, (j + 1) * tileSize.y + position.y);
-            quad[3].position = sf::Vector2f(i * tileSize.x + position.x, (j + 1) * tileSize.y + position.y);
-        }
-    }
 }
 
 void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const {
