@@ -1,9 +1,10 @@
 #include "TestState.hpp"
-#include "../Game.hpp"
+#include "../Core/Game.hpp"
 #include <cmath>
+#include <sstream>
 #include <iostream>
 
-TestState::TestState(Game& game, const char* name) : State(game, name) {
+TestState::TestState(Game& game, const char* name) : State(game, name), colliderTool(game, {64, 64}), boxPaintingTool(game, 4, grid) {
 	testBody = PhysicsBody("bottle", {480, 230});
 	ground = PhysicsBody("ground", { 0, 0 }, PhysicsBody::Type::STATIC);
 	testBody.setAsRectangle(16, 16);
@@ -11,6 +12,11 @@ TestState::TestState(Game& game, const char* name) : State(game, name) {
 	testBody.createBody();
 	ground.createBody();
 	tilemap = TileMap();
+	grid = Grid();
+	map.load("assets/demo.tmx");
+	layerZero = std::make_unique<TmxMapLayer>(map, 0);
+	layerOne = std::make_unique<TmxMapLayer>(map, 1);
+	layerTwo = std::make_unique<TmxMapLayer>(map, 2);
 	const int level[] =
 	{
 		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,-1,-1,-1, -1, -1,
@@ -28,7 +34,6 @@ TestState::TestState(Game& game, const char* name) : State(game, name) {
 
 	auto tileset = &ResourceHolder::get().textures.get("tileset");
 	tilemap.load(tileset, { 16, 16 }, {64, 64}, level, 20, 11);
-	tilemap.setPosition({ 0.0f, 0.0f});
 }
 
 TestState::~TestState() {
@@ -42,31 +47,29 @@ void TestState::handleInput() {
 
 void TestState::handleEvent(sf::Event e) {
 	if (e.type == sf::Event::MouseButtonPressed) {
-		if (vertexAdded < 3) {
-			sf::Vertex vertex(game->getWindow().mapPixelToCoords(sf::Mouse::getPosition(game->getWindow())), sf::Color(100, 0, 0, 200));
-			auto tileSize = tilemap.getTileSize();
-			vertex.position = { roundf(vertex.position.x / tileSize.x) * tileSize.x, roundf(vertex.position.y / tileSize.y) * tileSize.y };
-			points.push_back(vertex.position);
-			vertexAdded++;
-		}
-		if (vertexAdded == 3) {
-			PhysicsBody collider(nullptr, points[1], PhysicsBody::Type::STATIC);
-			collider.setAsTriangle(points);
-			collider.createBody();
-			colliders.push_back(collider);
-			vertexAdded = 0;
-			points.clear();
-		}
+		colliderTool.placeCollider();
 	}
 
 	if (e.type == sf::Event::KeyPressed) {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
 			preview = !preview;
 		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LBracket)) {
+			colliderTool.saveCollidersToFile("colliders.txt");
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) {
+			colliderTool.Colliders() = colliderTool.loadCollidersFromFile("colliders.txt");
+		}
 	}
 }
 
 void TestState::update(sf::Time deltaTime) {
+	layerZero->update(deltaTime);
+	float fps = 1.0f / deltaTime.asSeconds();
+	fps *= 2.0f;
+	game->getWindow()->getWindow().setTitle("Test State - (PHYSICS) FPS: " + std::to_string(fps));
 	testBody.update();
 	ground.update();
 }
@@ -76,10 +79,15 @@ void TestState::fixedUpdate(sf::Time deltaTime) {
 
 void TestState::render(sf::RenderTarget& renderer) {
 	renderer.clear(sf::Color(179, 205, 224));
-	renderer.draw(tilemap);
+	renderer.draw(grid);
 	testBody.render(renderer);
+	
+	renderer.draw(*layerZero);
+	renderer.draw(*layerOne);
+	renderer.draw(*layerTwo);
+
 	if (preview) {
-		for (auto& element : colliders) {
+		for (auto& element : colliderTool.Colliders()) {
 			element.render(renderer);
 		}
 	}

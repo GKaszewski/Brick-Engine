@@ -7,7 +7,7 @@
 
 void ColliderPlacementTool::placeCollider() {
 	if (vertexAdded < 3) {
-		sf::Vertex vertex(game.getWindow().mapPixelToCoords(sf::Mouse::getPosition(game.getWindow())), sf::Color(100, 0, 0, 200));
+		sf::Vertex vertex(game.getWindow()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(game.getWindow()->getWindow())), sf::Color(100, 0, 0, 200));
 		vertex.position = { roundf(vertex.position.x / tileSize.x) * tileSize.x, roundf(vertex.position.y / tileSize.y) * tileSize.y };
 		points.push_back(vertex.position);
 		vertexAdded++;

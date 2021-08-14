@@ -4,7 +4,7 @@
 * written for another century. Hehe
 */
 
-#include "Game.hpp"
+#include "Core/Game.hpp"
 #include "States/EditorState.hpp"
 #include "States/BetterEditor.hpp"
 #include "States/TestState.hpp"

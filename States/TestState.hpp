@@ -1,7 +1,15 @@
 #pragma once
-#include "../State.hpp"
+#include "../Core/State.hpp"
 #include "../Entities/PhysicsBody.hpp"
 #include "../Graphics/TileMap.hpp"
+#include "../Graphics/Grid.hpp"
+#include "../Graphics/TmxMap.hpp"
+#include "../Tools/ColliderPlacementTool.hpp"
+#include "../Tools/BoxPaintingTool.hpp"
+#include <vector>
+#include <memory>
+#include <tmxlite/Map.hpp>
+
 class TestState : public State {
 public:
 	TestState(Game& game, const char* name);
@@ -16,10 +24,16 @@ private:
 	PhysicsBody testBody;
 	PhysicsBody ground;
 	TileMap tilemap;
-	std::vector<PhysicsBody> colliders;
-	std::vector<sf::Vector2f> points;
-	int vertexAdded = 0;
-	int collidersAmount = 0;
+	Grid grid;
+	ColliderPlacementTool colliderTool;
+	BoxPaintingTool boxPaintingTool;
+	SelectionData selectionData;
+	std::vector<sf::RectangleShape> test;
 	bool preview = false;
+
+	tmx::Map map;
+	std::unique_ptr<TmxMapLayer> layerZero;
+	std::unique_ptr<TmxMapLayer> layerOne;
+	std::unique_ptr<TmxMapLayer> layerTwo;
 };
 

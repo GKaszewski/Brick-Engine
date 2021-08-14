@@ -1,5 +1,5 @@
 #pragma once
-#include "../State.hpp"
+#include "../Core/State.hpp"
 #include "../Entities/Cell.hpp"
 #include "../Entities/Player.hpp"
 #include "../GUI/Button.hpp"

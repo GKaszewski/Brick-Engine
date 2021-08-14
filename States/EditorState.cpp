@@ -1,12 +1,12 @@
 #include "EditorState.hpp"
-#include "../Game.hpp"
-#include "../ResourceHolder.hpp"
+#include "../Core/Game.hpp"
+#include "../Core/ResourceHolder.hpp"
 #include "../Entities/Player.hpp"
 #include <string>
 #include <iostream>
 
 EditorState::EditorState(Game & game, const char * name) : State(game, name) {
-	ImGui::SFML::Init(game.getWindow());
+	ImGui::SFML::Init(game.getWindow()->getWindow());
 	currrentState = "Edit mode";
 	ResourceHolder::get().textures.add("tileset");
 	grid = std::vector<std::vector<Cell>>(gridSize, std::vector<Cell>(gridSize));
@@ -45,7 +45,7 @@ EditorState::~EditorState() {
 }
 
 void EditorState::handleInput() {
-	if (game->getWindow().hasFocus() && !playMode) {
+	if (game->getWindow()->getWindow().hasFocus() && !playMode) {
 
 		moveCamera(10);
 
@@ -102,7 +102,7 @@ void EditorState::handleInput() {
 void EditorState::handleEvent(sf::Event e) {
 	ImGuiIO io = ImGui::GetIO();
 	ImGui::SFML::ProcessEvent(e);
-	testButton->handleEvents(e, game->getWindow());
+	testButton->handleEvents(e, game->getWindow()->getWindow());
 	if (e.type == sf::Event::KeyPressed) {
 		switch (e.key.code) {
 		case sf::Keyboard::Num1:
@@ -161,7 +161,7 @@ void EditorState::handleEvent(sf::Event e) {
 			switch (e.mouseButton.button) {
 			case sf::Mouse::Left: {
 				if (vertexsAdded < 3) {
-					sf::Vertex vertex(game->getWindow().mapPixelToCoords(sf::Mouse::getPosition(game->getWindow())), sf::Color(100, 0, 0, 200));
+					sf::Vertex vertex(game->getWindow()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(game->getWindow()->getWindow())), sf::Color(100, 0, 0, 200));
 					std::cout << "Vertex pos: " << vertex.position.x << " , " << vertex.position.y << std::endl;
 					std::cout << "Vertex: " << vertexsAdded << std::endl;
 
@@ -173,7 +173,7 @@ void EditorState::handleEvent(sf::Event e) {
 				break;
 			}
 			case sf::Mouse::Right: {
-				auto mousePos = game->getWindow().mapPixelToCoords(sf::Mouse::getPosition(game->getWindow()));
+				auto mousePos = game->getWindow()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(game->getWindow()->getWindow()));
 				if (colliders.size() > 0) {
 					for (int i = 0; i < colliders.size(); i++) {
 						if (colliders[i].getBounds().contains(mousePos)) {
@@ -197,8 +197,8 @@ void EditorState::handleEvent(sf::Event e) {
 		else if (!continousPainting && !boxSelection && !collisionsMode && !io.WantCaptureMouse) {
 			switch (e.mouseButton.button) {
 			case sf::Mouse::Left: {
-				auto mousePos = sf::Mouse::getPosition(game->getWindow());
-				auto translatedPos = game->getWindow().mapPixelToCoords(mousePos);
+				auto mousePos = sf::Mouse::getPosition(game->getWindow()->getWindow());
+				auto translatedPos = game->getWindow()->getWindow().mapPixelToCoords(mousePos);
 				for (int i = 0; i < gridSize; i++) {
 					for (int j = 0; j < gridSize; j++) {
 						if (grid[i][j].checkMouseClick(translatedPos)) {
@@ -213,8 +213,8 @@ void EditorState::handleEvent(sf::Event e) {
 				break;
 			}
 			case sf::Mouse::Right: {
-				auto mousePos = sf::Mouse::getPosition(game->getWindow());
-				auto translatedPos = game->getWindow().mapPixelToCoords(mousePos);
+				auto mousePos = sf::Mouse::getPosition(game->getWindow()->getWindow());
+				auto translatedPos = game->getWindow()->getWindow().mapPixelToCoords(mousePos);
 				std::cout << "Position: " << translatedPos.x << " , " << translatedPos.y << std::endl;
 				for (int i = 0; i < gridSize; i++) {
 					for (int j = 0; j < gridSize; j++) {
@@ -232,7 +232,7 @@ void EditorState::handleEvent(sf::Event e) {
 		else if (boxSelection) {
 			/*currentState.setString("BOX SELECTION");*/
 			mouseDrag = true;
-			box.setPosition(game->getWindow().mapPixelToCoords(sf::Mouse::getPosition(game->getWindow())));
+			box.setPosition(game->getWindow()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(game->getWindow()->getWindow())));
 		}
 	}
 
@@ -243,7 +243,7 @@ void EditorState::handleEvent(sf::Event e) {
 		}
 		if (boxSelection) {
 			mouseDrag = false;
-			box.setSize(game->getWindow().mapPixelToCoords({ e.mouseButton.x, e.mouseButton.y }) - box.getPosition());
+			box.setSize(game->getWindow()->getWindow().mapPixelToCoords({ e.mouseButton.x, e.mouseButton.y }) - box.getPosition());
 			for (int i = 0; i < gridSize; i++) {
 				for (int j = 0; j < gridSize; j++) {
 					if (grid[i][j].shape.getGlobalBounds().intersects(box.getGlobalBounds())) {
@@ -263,7 +263,7 @@ void EditorState::handleEvent(sf::Event e) {
 	if (e.type == sf::Event::MouseMoved && !playMode) {
 		if (boxSelection) {
 			if (mouseDrag) {
-				box.setSize(game->getWindow().mapPixelToCoords({ e.mouseMove.x, e.mouseMove.y }) - box.getPosition());
+				box.setSize(game->getWindow()->getWindow().mapPixelToCoords({ e.mouseMove.x, e.mouseMove.y }) - box.getPosition());
 			}
 		}
 	}
@@ -272,8 +272,8 @@ void EditorState::handleEvent(sf::Event e) {
 		/*currentState.setString("PAITING MODE");*/
 		if (mouseLocked) {
 			if (lastMousePos != sf::Mouse::getPosition()) {
-				auto mousePos = sf::Mouse::getPosition(game->getWindow());
-				auto translatedPos = game->getWindow().mapPixelToCoords(mousePos);
+				auto mousePos = sf::Mouse::getPosition(game->getWindow()->getWindow());
+				auto translatedPos = game->getWindow()->getWindow().mapPixelToCoords(mousePos);
 				std::cout << "Position: " << translatedPos.x << " , " << translatedPos.y << std::endl;
 				for (int i = 0; i < gridSize; i++) {
 					for (int j = 0; j < gridSize; j++) {
@@ -293,17 +293,17 @@ void EditorState::handleEvent(sf::Event e) {
 
 void EditorState::update(sf::Time deltaTime) {
 	float fps = 1.0f / deltaTime.asSeconds();
-	game->getWindow().setTitle("Level editor FPS: " + std::to_string(fps));
+	game->getWindow()->getWindow().setTitle("Level editor FPS: " + std::to_string(fps));
 
 	if (playMode) {
 		camera.setCenter(archer->body.getPosition());
 	}
 	
-	ImGui::SFML::Update(game->getWindow(), deltaTime);
+	ImGui::SFML::Update(game->getWindow()->getWindow(), deltaTime);
 	
 	drawGUI();
 	
-	auto previewTilePos = game->getWindow().mapPixelToCoords(sf::Mouse::getPosition(game->getWindow()));
+	auto previewTilePos = game->getWindow()->getWindow().mapPixelToCoords(sf::Mouse::getPosition(game->getWindow()->getWindow()));
 	previewTile.setPosition(((int)(previewTilePos.x / previewTile.getSize().x)) * 64, ((int)(previewTilePos.y / previewTile.getSize().y)) * 64);
 	previewTile.setFillColor(sf::Color(255, 255, 255, 100));
 }

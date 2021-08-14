@@ -4,7 +4,7 @@
 #include <string>
 #include "../Entities/PhysicsBody.hpp"
 #include "../Graphics/TileMap.hpp"
-#include "../Game.hpp"
+#include "../Core/Game.hpp"
 
 class ColliderPlacementTool {
 public:

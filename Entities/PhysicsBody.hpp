@@ -4,12 +4,11 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include "../Managers/PhysicsManager.hpp"
-#include "../ResourceHolder.hpp"
+#include "../Core/ResourceHolder.hpp"
 
 class PhysicsBody {
 public:
-	enum class Type
-	{
+	enum class Type {
 		STATIC,
 		DYNAMIC,
 		KINEMATIC
@@ -33,11 +32,10 @@ public:
 	void AddForce(b2Vec2 force);
 	void AddForce(sf::Vector2f force);
 	
-	sf::Sprite& Sprite() { return graphicsBody; }
 	b2Body& Body() { return *body; }
+	sf::Shape& Shape() { return *shape; }
 	sf::IntRect& TextureOffset() { return textureOffset; }
 private:
-	sf::Sprite graphicsBody;
 	sf::Shape* shape;
 	sf::Vector2f position;
 	sf::IntRect textureOffset;
@@ -46,4 +44,8 @@ private:
 	b2Body* body;
 	Type type;
 	int tag;
+};
+
+struct PhysicsBodyInfo {
+
 };

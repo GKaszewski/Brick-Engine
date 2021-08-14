@@ -1,8 +1,8 @@
 #include "BetterEditor.hpp"
 
 BetterEditor::BetterEditor(Game& game, const char* name) : State(game, name), colliderTool(game, { 64, 64 }) {
-	ImGui::SFML::Init(game.getWindow());
-	grid = Grid(game.getWindow().getSize(), {64, 64}, { 0.0f, 0.0f });
+	ImGui::SFML::Init(game.getWindow()->getWindow());
+	grid = Grid(game.getWindow()->getWindowSize(), {64, 64}, { 0.0f, 0.0f });
 }
 
 BetterEditor::~BetterEditor() {
@@ -22,7 +22,7 @@ void BetterEditor::handleEvent(sf::Event e) {
 }
 
 void BetterEditor::update(sf::Time deltaTime) {
-	ImGui::SFML::Update(game->getWindow(), deltaTime);
+	ImGui::SFML::Update(game->getWindow()->getWindow(), deltaTime);
 	drawGUI();
 }
 
@@ -73,6 +73,7 @@ void BetterEditor::drawGUI() {
 }
 
 void BetterEditor::loadMap(const std::string& filename) {
+	mapLayers.clear();
 	map.load(filename);
 	int layerCount = map.getLayers().size();
 	for (int i = 0; i < layerCount; ++i) {
@@ -84,7 +85,7 @@ void BetterEditor::loadMap(const std::string& filename) {
 
 void BetterEditor::setupGrid() {
 	sf::Vector2u size = { map.getTileSize().x, map.getTileSize().y };
-	grid = Grid(game->getWindow().getSize(), size, { 0.0f, 0.0f });
+	grid = Grid(game->getWindow()->getWindowSize(), size, { 0.0f, 0.0f });
 	colliderTool.TileSize() = size;
 }
 

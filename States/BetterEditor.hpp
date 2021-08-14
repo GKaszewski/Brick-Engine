@@ -4,8 +4,8 @@
 #include <vector>
 #include <memory>
 
-#include "../State.hpp"
-#include "../Game.hpp"
+#include "../Core/State.hpp"
+#include "../Core/Game.hpp"
 #include "../Graphics/TmxMap.hpp"
 #include "../Graphics/Grid.hpp"
 #include "../Tools/ColliderPlacementTool.hpp"

@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../ResourceHolder.hpp"
+#include "../Core/ResourceHolder.hpp"
 
 class Widget {
 public:
