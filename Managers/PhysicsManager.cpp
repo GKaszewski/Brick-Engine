@@ -19,5 +19,6 @@ PhysicsManager::PhysicsManager() {
 PhysicsManager::~PhysicsManager() {
     delete gravity;
     delete world;
+    delete instance;
 }
 

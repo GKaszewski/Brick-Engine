@@ -2,14 +2,10 @@
 #include "../Game.hpp"
 #include <cmath>
 #include <iostream>
+#include <memory>
+#include "../Managers/EntityManager.hpp"
 
 TestState::TestState(Game& game, const char* name) : State(game, name) {
-	testBody = PhysicsBody("bottle", {480, 230});
-	ground = PhysicsBody("ground", { 0, 0 }, PhysicsBody::Type::STATIC);
-	testBody.setAsRectangle(16, 16);
-	ground.setAsRectangle(64, 64);
-	testBody.createBody();
-	ground.createBody();
 	tilemap = TileMap();
 	const int level[] =
 	{
@@ -29,6 +25,11 @@ TestState::TestState(Game& game, const char* name) : State(game, name) {
 	auto tileset = &ResourceHolder::get().textures.get("tileset");
 	tilemap.load(tileset, { 16, 16 }, {64, 64}, level, 20, 11);
 	tilemap.setPosition({ 0.0f, 0.0f});
+
+	testBody = new Bottle({ 480.0f, 320.0f });
+	player = new RigidbodyPlayer({ 580.0f, 320.0f });
+
+	PhysicsManager::getInstance()->world->SetContactListener(&collisionListener);
 }
 
 TestState::~TestState() {
@@ -36,7 +37,20 @@ TestState::~TestState() {
 
 void TestState::handleInput() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-		testBody.setPosition({ 480, 230 });
+		testBody->setPosition({ 480, 230 });
+		player->setPosition({ 580, 230 });
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+		player->handleMovement(RigidbodyPlayer::Direction::UP);
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+		player->handleMovement(RigidbodyPlayer::Direction::LEFT);
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+		player->handleMovement(RigidbodyPlayer::Direction::RIGHT);
 	}
 }
 
@@ -50,10 +64,9 @@ void TestState::handleEvent(sf::Event e) {
 			vertexAdded++;
 		}
 		if (vertexAdded == 3) {
-			PhysicsBody collider(nullptr, points[1], PhysicsBody::Type::STATIC);
-			collider.setAsTriangle(points);
-			collider.createBody();
-			colliders.push_back(collider);
+			auto collider = new PhysicsBody(nullptr, points[1], PhysicsBody::Type::STATIC);
+			collider->setAsTriangle(points);
+			collider->createBody();
 			vertexAdded = 0;
 			points.clear();
 		}
@@ -67,8 +80,10 @@ void TestState::handleEvent(sf::Event e) {
 }
 
 void TestState::update(sf::Time deltaTime) {
-	testBody.update();
-	ground.update();
+	EntityManager::getInstance()->destroyBodies();
+	for (auto entity : EntityManager::getInstance()->physicsEntities) {
+		entity->update();
+	}
 }
 
 void TestState::fixedUpdate(sf::Time deltaTime) {
@@ -77,10 +92,12 @@ void TestState::fixedUpdate(sf::Time deltaTime) {
 void TestState::render(sf::RenderTarget& renderer) {
 	renderer.clear(sf::Color(179, 205, 224));
 	renderer.draw(tilemap);
-	testBody.render(renderer);
-	if (preview) {
+	for (auto entity : EntityManager::getInstance()->physicsEntities) {
+		entity->render(renderer);
+	}
+	/*if (preview) {
 		for (auto& element : colliders) {
 			element.render(renderer);
 		}
-	}
+	}*/
 }

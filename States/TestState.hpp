@@ -2,6 +2,9 @@
 #include "../State.hpp"
 #include "../Entities/PhysicsBody.hpp"
 #include "../Graphics/TileMap.hpp"
+#include "../Entities/RigidbodyPlayer.hpp"
+#include "../Physics/CollisionListener.hpp"
+#include "../Entities/Bottle.hpp"
 class TestState : public State {
 public:
 	TestState(Game& game, const char* name);
@@ -13,8 +16,9 @@ public:
 	void render(sf::RenderTarget& renderer) override;
 
 private:
-	PhysicsBody testBody;
-	PhysicsBody ground;
+	Bottle* testBody;
+	RigidbodyPlayer* player;
+	CollisionListener collisionListener;
 	TileMap tilemap;
 	std::vector<PhysicsBody> colliders;
 	std::vector<sf::Vector2f> points;

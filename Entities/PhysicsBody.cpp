@@ -1,8 +1,9 @@
 #include "PhysicsBody.hpp"
 #include "../utils.hpp"
+#include "../Managers/EntityManager.hpp"	
 
 
-PhysicsBody::PhysicsBody(const char* textureName, sf::Vector2f position, Type bodyType, int tag, sf::IntRect textureOffset) {
+PhysicsBody::PhysicsBody(const char* textureName, sf::Vector2f position, Type bodyType, PhysicsManager::TAGS tag, sf::IntRect textureOffset) {
 	type = bodyType;
 	this->textureOffset = textureOffset;
 	if (texture != nullptr) {
@@ -20,6 +21,7 @@ PhysicsBody::PhysicsBody(const char* textureName, sf::Vector2f position, Type bo
 }
 
 PhysicsBody::~PhysicsBody() {
+	printf("i am deleted\n");
 }
 
 void PhysicsBody::setAsTriangle(const std::vector<sf::Vector2f>& points) {
@@ -61,6 +63,7 @@ void PhysicsBody::render(sf::RenderTarget & renderer) {
 }
 
 void PhysicsBody::update() {
+	if (body == nullptr) return;
 	shape->setPosition(utils::convert_b2vec_to_sfml_vec(body->GetPosition()));
 	shape->setRotation(body->GetAngle() * 180.0f / b2_pi);
 }
@@ -94,6 +97,10 @@ void PhysicsBody::AddForce(sf::Vector2f force) {
 	body->ApplyLinearImpulse(utils::convert_sfml_vec_to_b2vec(force), body->GetWorldCenter(), true);
 }
 
+void PhysicsBody::onCollisionStart(PhysicsBody* other) {}
+
+void PhysicsBody::onCollisionEnd(PhysicsBody* other) {}
+
 void PhysicsBody::createBody(float friction) {
 	switch (type) {
 	case PhysicsBody::Type::STATIC:
@@ -126,6 +133,9 @@ void PhysicsBody::createBody(float friction) {
 
 	fixtureDef.shape = &shape;
 	fixtureDef.friction = friction;
-	fixtureDef.userData.pointer = tag;
 	body->CreateFixture(&fixtureDef);
+
+	body->GetUserData().pointer = (uintptr_t)this;
+	EntityManager::getInstance()->physicsEntities.push_back(this);
+	printf("Added new entity.\n");
 }

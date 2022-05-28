@@ -8,7 +8,7 @@ public:
 	Player(sf::Vector2f pos = { 0,0 }) {
 		ResourceHolder::get().textures.add("player");
 		body.setPosition(pos);
-		body.setSize({ 64, 128 });
+		body.setSize({ 32, 32 });
 		velocity = sf::Vector2f(0, -30);
 		acceleration = sf::Vector2f(0, 9.81); //Earth's acceleration
 		body.setTexture(&ResourceHolder::get().textures.get("player"));
@@ -19,6 +19,7 @@ public:
 
 	sf::RectangleShape body;
 	sf::Vector2f position, velocity, acceleration;
+
 	void move(Direction direction, float speed) {
 		switch (direction) {
 		case Player::Direction::UP:

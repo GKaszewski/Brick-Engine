@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
@@ -15,8 +16,8 @@ public:
 		KINEMATIC
 	};
 	PhysicsBody() = default;
-	PhysicsBody(const char* textureName, sf::Vector2f position = { 0.0f, 0.0f }, Type bodyType = Type::DYNAMIC, int tag = -1, sf::IntRect textureOffset = {});
-	~PhysicsBody();
+	PhysicsBody(const char* textureName, sf::Vector2f position = { 0.0f, 0.0f }, Type bodyType = Type::DYNAMIC, PhysicsManager::TAGS tag = PhysicsManager::TAGS::ENVIRONMENT, sf::IntRect textureOffset = {});
+	virtual ~PhysicsBody();
 	void setAsTriangle(const std::vector<sf::Vector2f> & points);
 	void setAsRectangle(float width, float height);
 	void setAsCircle(float radius);
@@ -32,11 +33,16 @@ public:
 	void ApplyImpulse(sf::Vector2f impulse);
 	void AddForce(b2Vec2 force);
 	void AddForce(sf::Vector2f force);
+
+	virtual void onCollisionStart(PhysicsBody* other);
+	virtual void onCollisionEnd(PhysicsBody* other);
 	
 	sf::Sprite& Sprite() { return graphicsBody; }
 	b2Body& Body() { return *body; }
+	sf::Shape& Shape() { return *shape; }
 	sf::IntRect& TextureOffset() { return textureOffset; }
-private:
+	PhysicsManager::TAGS Tag() { return tag; }
+protected:
 	sf::Sprite graphicsBody;
 	sf::Shape* shape;
 	sf::Vector2f position;
@@ -45,5 +51,5 @@ private:
 	b2BodyDef bodyDef;
 	b2Body* body;
 	Type type;
-	int tag;
+	PhysicsManager::TAGS tag;
 };

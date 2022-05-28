@@ -40,7 +40,7 @@ void Game::run(){
         lastTime = time;
         lag += elapsed;
 
-        state.handleInput();
+        if (window.hasFocus()) state.handleInput();
         PhysicsManager::getInstance()->world->Step(1 / 60.0f, 15, 15);
         state.update(elapsed);
 
