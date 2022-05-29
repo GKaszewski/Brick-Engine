@@ -9,6 +9,7 @@
 #include "../Graphics/TmxMap.hpp"
 #include "../Graphics/Grid.hpp"
 #include "../Tools/ColliderPlacementTool.hpp"
+#include "../Entities/RigidbodyPlayer.hpp"
 
 #include <imgui.h>
 #include <imgui-SFML.h>
@@ -28,15 +29,19 @@ private:
 	TileMap tileMapInfo;
 	ColliderPlacementTool colliderTool;
 	Grid grid;
+	RigidbodyPlayer* player;
+	CollisionListener collisionListener;
 
 	void drawGUI();
 	void loadMap(const std::string& filename);
 	void setupGrid();
 	void saveColliders();
 	void loadColliders();
+	void loadColliders(const std::string & filename);
 
 	bool displayColliders = false;
-	bool displayGrid = true;
+	bool play = true;
+	bool displayGrid = false;
 
 	char collidersFileNameSaveBuffer[64];
 	char collidersFileNameLoadBuffer[64];

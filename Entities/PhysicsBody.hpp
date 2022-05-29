@@ -21,7 +21,7 @@ public:
 	void setAsTriangle(const std::vector<sf::Vector2f> & points);
 	void setAsRectangle(float width, float height);
 	void setAsCircle(float radius);
-	void createBody(float friction = 0.3f);
+	virtual void createBody(float friction = 0.3f);
 
 	void render(sf::RenderTarget & renderer);
 	void update();
@@ -34,8 +34,8 @@ public:
 	void AddForce(b2Vec2 force);
 	void AddForce(sf::Vector2f force);
 
-	virtual void onCollisionStart(PhysicsBody* other);
-	virtual void onCollisionEnd(PhysicsBody* other);
+	virtual void onCollisionStart(b2Fixture* us, b2Fixture* other);
+	virtual void onCollisionEnd(b2Fixture* us,b2Fixture* other);
 	
 	sf::Sprite& Sprite() { return graphicsBody; }
 	b2Body& Body() { return *body; }

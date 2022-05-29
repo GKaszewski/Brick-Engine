@@ -20,9 +20,10 @@ Bottle::~Bottle() {
 	printf("---- from bottle ----\n");
 }
 
-void Bottle::onCollisionStart(PhysicsBody* other) {
-	printf("Other tag: %i\n", other->Tag());
-	if (other->Tag() == PhysicsManager::TAGS::PLAYER) {
+void Bottle::onCollisionStart(b2Fixture* us, b2Fixture* other) {
+	auto rbBody = (PhysicsBody*)other->GetBody()->GetUserData().pointer;
+	printf("Other tag: %i\n", rbBody->Tag());
+	if (rbBody->Tag() == PhysicsManager::TAGS::PLAYER) {
 		printf("this is from the bottle callback!\n");
 		EntityManager::getInstance()->physicsBodiesToRemove.insert(this);
 	}

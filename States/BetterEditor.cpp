@@ -1,8 +1,14 @@
 #include "BetterEditor.hpp"
+#include <iostream>
 
 BetterEditor::BetterEditor(Game& game, const char* name) : State(game, name), colliderTool(game, { 64, 64 }) {
 	ImGui::SFML::Init(game.getWindow());
-	grid = Grid(game.getWindow().getSize(), {64, 64}, { 0.0f, 0.0f });
+	grid = Grid(game.getWindow().getSize(), { 32, 32 }, { 0.0f, 0.0f });
+	player = new RigidbodyPlayer({ 320.f, 0.0f }, 10.f);
+
+	loadMap("assets/map2.tmx");
+	loadColliders("colliders_data.txt");
+	PhysicsManager::getInstance()->world->SetContactListener(&collisionListener);
 }
 
 BetterEditor::~BetterEditor() {
@@ -19,11 +25,17 @@ void BetterEditor::handleEvent(sf::Event e) {
 	if (e.type == sf::Event::MouseButtonPressed && !io.WantCaptureMouse) {
 		colliderTool.placeCollider();
 	}
+
+	if (play) player->handleEvent(e);
 }
 
 void BetterEditor::update(sf::Time deltaTime) {
 	ImGui::SFML::Update(game->getWindow(), deltaTime);
 	drawGUI();
+	if (play) {
+		player->handleMovement();
+	}
+	player->update();
 }
 
 void BetterEditor::fixedUpdate(sf::Time deltaTime) {
@@ -33,6 +45,8 @@ void BetterEditor::render(sf::RenderTarget& renderer) {
 	for (auto& layer : mapLayers) {
 		renderer.draw(*layer);
 	}
+	
+	player->render(renderer);
 
 	if (displayGrid) {
 		renderer.draw(grid);
@@ -40,7 +54,7 @@ void BetterEditor::render(sf::RenderTarget& renderer) {
 
 	if (displayColliders) {
 		for (auto& element : colliderTool.Colliders()) {
-			element.render(renderer);
+			element->render(renderer);
 		}
 	}
 
@@ -66,6 +80,7 @@ void BetterEditor::drawGUI() {
 	}
 	ImGui::Checkbox("Grid", &displayGrid);
 	ImGui::Checkbox("Colliders preview", &displayColliders);
+	ImGui::Checkbox("Play", &play);
 	ImGui::InputText("Map", mapNameBuffer, IM_ARRAYSIZE(mapNameBuffer));
 	ImGui::InputText("Colliders save", collidersFileNameSaveBuffer, IM_ARRAYSIZE(collidersFileNameSaveBuffer));
 	ImGui::InputText("Colliders load", collidersFileNameLoadBuffer, IM_ARRAYSIZE(collidersFileNameLoadBuffer));
@@ -94,4 +109,8 @@ void BetterEditor::saveColliders() {
 
 void BetterEditor::loadColliders() {
 	colliderTool.Colliders() = colliderTool.loadCollidersFromFile(std::string(collidersFileNameLoadBuffer));
+}
+
+void BetterEditor::loadColliders(const std::string& filename) {
+	colliderTool.Colliders() = colliderTool.loadCollidersFromFile(filename);
 }

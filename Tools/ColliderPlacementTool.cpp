@@ -13,9 +13,9 @@ void ColliderPlacementTool::placeCollider() {
 		vertexAdded++;
 	}
 	if (vertexAdded == 3) {
-		PhysicsBody collider(nullptr, points[1], PhysicsBody::Type::STATIC);
-		collider.setAsTriangle(points);
-		collider.createBody();
+		auto collider = new PhysicsBody(nullptr, points[1], PhysicsBody::Type::STATIC);
+		collider->setAsTriangle(points);
+		collider->createBody();
 		colliders.push_back(collider);
 		vertexAdded = 0;
 		points.clear();
@@ -26,9 +26,9 @@ void ColliderPlacementTool::saveCollidersToFile(const std::string& filename) {
 	std::ofstream file;
 	file.open(filename);
 	for (auto collider : colliders) {
-		auto pointCount = collider.Shape().getPointCount();
+		auto pointCount = collider->Shape().getPointCount();
 		for (int i = 0; i < pointCount; ++i) {
-			auto point = collider.Shape().getTransform().transformPoint(collider.Shape().getPoint(i));
+			auto point = collider->Shape().getTransform().transformPoint(collider->Shape().getPoint(i));
 			if (i < (pointCount - 1))
 				file << point.x << "," << point.y << ",";
 			else
@@ -40,10 +40,10 @@ void ColliderPlacementTool::saveCollidersToFile(const std::string& filename) {
 	file.close();
 }
 
-std::vector<PhysicsBody> ColliderPlacementTool::loadCollidersFromFile(const std::string& filename) {
+std::vector<PhysicsBody*> ColliderPlacementTool::loadCollidersFromFile(const std::string& filename) {
 	std::string line;
 	std::ifstream file(filename);
-	std::vector<PhysicsBody> loadedColliders;
+	std::vector<PhysicsBody*> loadedColliders;
 	while (std::getline(file, line)) {
 		auto parts = utils::split(line, ',');
 		std::vector<sf::Vector2f> points;
@@ -53,9 +53,9 @@ std::vector<PhysicsBody> ColliderPlacementTool::loadCollidersFromFile(const std:
 			points.push_back({ x,y });
 		}
 		
-		PhysicsBody collider(nullptr, points[1], PhysicsBody::Type::STATIC);
-		collider.setAsTriangle(points);
-		collider.createBody();
+		auto collider = new PhysicsBody(nullptr, points[1], PhysicsBody::Type::STATIC);
+		collider->setAsTriangle(points);
+		collider->createBody();
 		loadedColliders.push_back(collider);
 	}
 

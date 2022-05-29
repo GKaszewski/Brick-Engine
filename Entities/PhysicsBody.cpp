@@ -82,11 +82,18 @@ void PhysicsBody::setPosition(sf::Vector2f position) {
 }
 
 void PhysicsBody::ApplyImpulse(b2Vec2 impulse) {
-	body->ApplyLinearImpulse(impulse, body->GetWorldCenter(), true);
+	auto velocity = body->GetLinearVelocity();
+	b2Vec2 velocityChange = impulse - velocity;
+	
+	body->ApplyLinearImpulse({velocityChange.x * body->GetMass(), velocityChange.y * body->GetMass()}, body->GetWorldCenter(), true);
 }
 
 void PhysicsBody::ApplyImpulse(sf::Vector2f impulse) {
-	body->ApplyLinearImpulse(utils::convert_sfml_vec_to_b2vec(impulse), body->GetWorldCenter(), true);
+	auto velocity = body->GetLinearVelocity();
+	auto convertedImpulse = utils::convert_sfml_vec_to_b2vec(impulse);
+	b2Vec2 velocityChange = convertedImpulse - velocity;
+	
+	body->ApplyLinearImpulse({velocityChange.x * body->GetMass(), velocityChange.y * body->GetMass() }, body->GetWorldCenter(), true);
 }
 
 void PhysicsBody::AddForce(b2Vec2 force) {
@@ -97,9 +104,9 @@ void PhysicsBody::AddForce(sf::Vector2f force) {
 	body->ApplyLinearImpulse(utils::convert_sfml_vec_to_b2vec(force), body->GetWorldCenter(), true);
 }
 
-void PhysicsBody::onCollisionStart(PhysicsBody* other) {}
+void PhysicsBody::onCollisionStart(b2Fixture* us, b2Fixture* other) {}
 
-void PhysicsBody::onCollisionEnd(PhysicsBody* other) {}
+void PhysicsBody::onCollisionEnd(b2Fixture* us, b2Fixture* other) {}
 
 void PhysicsBody::createBody(float friction) {
 	switch (type) {

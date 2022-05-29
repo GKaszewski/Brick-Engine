@@ -4,15 +4,17 @@
 #include <iostream>
 
 void CollisionListener::BeginContact(b2Contact* contactInfo) {
-	auto first = (PhysicsBody*)contactInfo->GetFixtureA()->GetBody()->GetUserData().pointer;
-	auto second = (PhysicsBody*)contactInfo->GetFixtureB()->GetBody()->GetUserData().pointer;
+	auto firstBody = (PhysicsBody*)contactInfo->GetFixtureA()->GetBody()->GetUserData().pointer;
+	auto first = contactInfo->GetFixtureA();
+	auto second = contactInfo->GetFixtureB();
 
-	first->onCollisionStart(second);
+	firstBody->onCollisionStart(first, second);
 }
 
 void CollisionListener::EndContact(b2Contact* contactInfo) {
-	auto first = (PhysicsBody*)contactInfo->GetFixtureA()->GetBody()->GetUserData().pointer;
-	auto second = (PhysicsBody*)contactInfo->GetFixtureB()->GetBody()->GetUserData().pointer;
+	auto firstBody = (PhysicsBody*)contactInfo->GetFixtureA()->GetBody()->GetUserData().pointer;
+	auto first = contactInfo->GetFixtureA();
+	auto second = contactInfo->GetFixtureB();
 
-	first->onCollisionEnd(second);
+	firstBody->onCollisionEnd(first, second);
 }

@@ -27,7 +27,7 @@ TestState::TestState(Game& game, const char* name) : State(game, name) {
 	tilemap.setPosition({ 0.0f, 0.0f});
 
 	testBody = new Bottle({ 480.0f, 320.0f });
-	player = new RigidbodyPlayer({ 580.0f, 320.0f });
+	player = new RigidbodyPlayer({ 580.0f, 320.0f }, 10.f);
 
 	PhysicsManager::getInstance()->world->SetContactListener(&collisionListener);
 }
@@ -41,16 +41,8 @@ void TestState::handleInput() {
 		player->setPosition({ 580, 230 });
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-		player->handleMovement(RigidbodyPlayer::Direction::UP);
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-		player->handleMovement(RigidbodyPlayer::Direction::LEFT);
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-		player->handleMovement(RigidbodyPlayer::Direction::RIGHT);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+		game->popState();
 	}
 }
 
@@ -77,10 +69,13 @@ void TestState::handleEvent(sf::Event e) {
 			preview = !preview;
 		}
 	}
+	
+	player->handleEvent(e);
 }
 
 void TestState::update(sf::Time deltaTime) {
 	EntityManager::getInstance()->destroyBodies();
+	player->handleMovement();
 	for (auto entity : EntityManager::getInstance()->physicsEntities) {
 		entity->update();
 	}
@@ -95,9 +90,4 @@ void TestState::render(sf::RenderTarget& renderer) {
 	for (auto entity : EntityManager::getInstance()->physicsEntities) {
 		entity->render(renderer);
 	}
-	/*if (preview) {
-		for (auto& element : colliders) {
-			element.render(renderer);
-		}
-	}*/
 }
